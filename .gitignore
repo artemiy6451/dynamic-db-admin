@@ -30,4 +30,8 @@ go.work.sum
 .env
 
 # build files
+bin/
 build/
+.task/
+frontend/node_modules
+frontend/dist
