@@ -1,16 +1,30 @@
 APP_NAME=dynamic-ad-admin
 
 
-.PHONY=run test build clean
+.PHONY: dev build package test test-race fmt vet check clean
 
-run:
-	go run .
+dev:
+	wails3 dev
+
+build:
+	wails3 build
+
+package:
+	wails3 package
 
 test:
 	go test ./...
 
-build:
-	go build -o build/$(APP_NAME) .
+test-race:
+	go test -race ./...
+
+fmt:
+	go fmt ./...
+
+vet:
+	go vet ./...
+
+check: fmt vet test
 
 clean:
-	rm -rf build
+	go clean
