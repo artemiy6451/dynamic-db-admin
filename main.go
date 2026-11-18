@@ -20,7 +20,7 @@ import (
 var assets embed.FS
 
 var (
-	cfg           config.Config        = config.New()
+	cfg           config.Config         = config.New()
 	configService *config.ConfigService = config.NewConfigService(cfg)
 )
 
