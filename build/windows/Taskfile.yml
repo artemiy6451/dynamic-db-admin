@@ -24,3 +24,8 @@ tasks:
     env:
       GOOS: windows
       CGO_ENABLED: '{{.CGO_ENABLED | default "0"}}'
+
+  run:
+    desc: Run the Windows development build
+    cmds:
+      - bin/{{.APP_NAME}}.exe
