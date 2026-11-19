@@ -3,7 +3,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"artemiy6451/dynamic-db-admin/internal/app"
 	"artemiy6451/dynamic-db-admin/internal/infrastructure/config"
@@ -28,22 +27,11 @@ func main() {
 			Output:      cfg.Logging.Output,
 		})
 
-	app := app.New(logger, cfg)
-
-	// Create a goroutine that emits an event containing the current time every second.
-	// The frontend can listen to this event and update the UI accordingly.
-	go func() {
-		for {
-			now := time.Now().Format(time.RFC1123)
-			app.Event.Emit("time", now)
-			time.Sleep(time.Second)
-		}
-	}()
-
-	// Run the application. This blocks until the application has been exited.
-	err := app.Run()
-	// If an error occurred while running the application, log it and exit.
+	app, err := app.New(logger, cfg)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("application failed: %v", err)
+	}
+	if err := app.Run(); err != nil {
+		log.Fatalf("application failed: %v", err)
 	}
 }
