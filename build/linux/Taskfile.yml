@@ -24,3 +24,8 @@ tasks:
     env:
       GOOS: linux
       CGO_ENABLED: 1
+
+  run:
+    desc: Run the Linux development build
+    cmds:
+      - ./bin/{{.APP_NAME}}
