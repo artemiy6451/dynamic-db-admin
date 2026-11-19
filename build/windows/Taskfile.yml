@@ -1,0 +1,26 @@
+version: '3'
+
+includes:
+  common: ../Taskfile.yml
+
+tasks:
+  build:
+    desc: Build Dynamic DB Admin for Windows
+    cmds:
+      - task: build:native
+        vars:
+          DEV: '{{.DEV}}'
+
+  build:native:
+    internal: true
+    deps:
+      - task: common:build:frontend
+        vars:
+          DEV:
+            ref: .DEV
+    cmds:
+      - mkdir -p bin
+      - '{{if eq .DEV "true"}}go build -buildvcs=false -gcflags=all="-N -l" -o "bin/{{.APP_NAME}}.exe"{{else}}go build -tags production -trimpath -buildvcs=false -ldflags="-w -s -H windowsgui" -o "bin/{{.APP_NAME}}.exe"{{end}}'
+    env:
+      GOOS: windows
+      CGO_ENABLED: '{{.CGO_ENABLED | default "0"}}'
