@@ -31,7 +31,6 @@ go.work.sum
 
 # build files
 bin/
-build/
 .task/
 frontend/node_modules
 node_modules/
