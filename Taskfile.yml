@@ -10,7 +10,6 @@ vars:
 includes:
   common: ./build/Taskfile.yml
   windows: ./build/windows/Taskfile.yml
-  darwin: ./build/darwin/Taskfile.yml
   linux: ./build/linux/Taskfile.yml
 
 tasks:
@@ -18,11 +17,6 @@ tasks:
     desc: Build the application for the current platform
     cmds:
       - task: "{{.GOOS}}:build"
-
-  package:
-    desc: Package the application for the current platform
-    cmds:
-      - task: "{{.GOOS}}:package"
 
   run:
     desc: Run the built application
