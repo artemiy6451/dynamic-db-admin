@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"strings"
 	"sync"
 
 	"artemiy6451/dynamic-db-admin/internal/infrastructure/config"
@@ -73,4 +74,16 @@ func (s *AppService) Ping() (string, error) {
 	}
 
 	return "Backend is running", nil
+}
+
+func (s *AppService) Greet(name string) string {
+	name = strings.TrimSpace(name)
+
+	if name == "" {
+		name = "Developer"
+	}
+
+	s.logger.Debug("greetings request")
+
+	return fmt.Sprintf("Hello, %s! Welcome to Dynamic DB Admin.", name)
 }

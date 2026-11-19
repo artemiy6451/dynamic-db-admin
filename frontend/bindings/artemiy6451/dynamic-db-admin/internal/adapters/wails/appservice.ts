@@ -13,6 +13,10 @@ export function GetAppInfo(): $CancellablePromise<$models.AppInfo> {
     return $Call.ByID(2679357342);
 }
 
+export function Greet(name: string): $CancellablePromise<string> {
+    return $Call.ByID(537688726, name);
+}
+
 export function Ping(): $CancellablePromise<string> {
     return $Call.ByID(895171405);
 }
