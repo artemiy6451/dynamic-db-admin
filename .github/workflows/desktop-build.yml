@@ -48,8 +48,18 @@ jobs:
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
+      - name: Run Go tests
+        run: go test ./...
+
+      - name: Run go vet
+        run: go vet ./...
+
       - name: Build desktop application
         run: wails3 build
+
+      - name: Verify Vite production output
+        shell: bash
+        run: test -s frontend/dist/index.html
 
       - name: Upload Linux binary
         if: runner.os == 'Linux'
