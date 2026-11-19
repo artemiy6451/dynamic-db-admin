@@ -1,23 +1,38 @@
 version: '3'
 
 vars:
-  VITE_PORT: '{{.WAILS_VITE_PORT | default "9245"}}'
+  APP_NAME: "dynamic-db-admin"
+  BIN_DIR: "bin"
+  PACKAGE_MANAGER: '{{.PACKAGE_MANAGER | default "npm"}}'
+  VITE_PORT: '{{.WAILS_VITE_PORT | default 9245}}'
+  GOOS: '{{.GOOS | default OS}}'
+
+includes:
+  common: ./build/Taskfile.yml
+  windows: ./build/windows/Taskfile.yml
+  darwin: ./build/darwin/Taskfile.yml
+  linux: ./build/linux/Taskfile.yml
 
 tasks:
+  build:
+    desc: Build the application for the current platform
+    cmds:
+      - task: "{{.GOOS}}:build"
+
+  package:
+    desc: Package the application for the current platform
+    cmds:
+      - task: "{{.GOOS}}:package"
+
+  run:
+    desc: Run the built application
+    cmds:
+      - task: "{{.GOOS}}:run"
+
   dev:
     desc: Run the Wails v3 application in development mode
     cmds:
-      - wails3 dev
-
-  build:
-    desc: Build the desktop application for the current platform
-    cmds:
-      - wails3 build
-
-  bindings:
-    desc: Regenerate Wails v3 frontend bindings
-    cmds:
-      - wails3 generate bindings
+      - wails3 dev -config ./build/config.yml -port {{.VITE_PORT}}
 
   test:
     desc: Run Go tests
