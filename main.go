@@ -2,26 +2,14 @@
 package main
 
 import (
-	"embed"
 	"log"
 	"time"
 
-	"artemiy6451/dynamic-db-admin/internal/config"
+	"artemiy6451/dynamic-db-admin/internal/app"
+	"artemiy6451/dynamic-db-admin/internal/infrastructure/config"
+	"artemiy6451/dynamic-db-admin/internal/infrastructure/logging"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
-)
-
-// Wails uses Go's `embed` package to embed the frontend files into the binary.
-// Any files in the frontend/dist folder will be embedded into the binary and
-// made available to the frontend.
-// See https://pkg.go.dev/embed for more information.
-
-//go:embed all:frontend/dist
-var assets embed.FS
-
-var (
-	cfg           config.Config         = config.New()
-	configService *config.ConfigService = config.NewConfigService(cfg)
 )
 
 func init() {
@@ -31,33 +19,16 @@ func init() {
 	application.RegisterEvent[string]("time")
 }
 
-// main function serves as the application's entry point. It initializes the application, creates a window,
-// and starts a goroutine that emits a time-based event every second. It subsequently runs the application and
-// logs any error that might occur.
 func main() {
-	// Create a new Wails application by providing the necessary options.
-	app := application.New(application.Options{
-		Name:        cfg.App.Name,
-		Description: cfg.App.Description,
-		Services: []application.Service{
-			application.NewService(&GreetService{}),
-			application.NewService(configService),
-		},
-		Assets: application.AssetOptions{
-			Handler: application.AssetFileServerFS(assets),
-		},
-	})
+	cfg := config.New()
+	logger := logging.New(
+		logging.Config{
+			Development: cfg.Logging.Development,
+			Level:       cfg.Logging.Level,
+			Output:      cfg.Logging.Output,
+		})
 
-	// Create a new window with the necessary options.
-	app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Title:            cfg.App.Window.Title,
-		MinWidth:         cfg.App.Window.MinWidth,
-		MinHeight:        cfg.App.Window.MinHeight,
-		Width:            cfg.App.Window.Width,
-		Height:           cfg.App.Window.Height,
-		BackgroundColour: application.NewRGB(6, 7, 15),
-		URL:              "/",
-	})
+	app := app.New(logger, cfg)
 
 	// Create a goroutine that emits an event containing the current time every second.
 	// The frontend can listen to this event and update the UI accordingly.

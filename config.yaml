@@ -4,9 +4,15 @@ version: 3
 app:
   name: Dynamic DB Admin
   description: "Desktop application for PostgreSQL database management"
+  version: "0.0.1"
   window:
     title: Dynamic DB Admin
     min_width: 1000
     min_height: 618
     width: 1000
     height: 618
+
+logging:
+  development: true
+  level: debug
+  output: std

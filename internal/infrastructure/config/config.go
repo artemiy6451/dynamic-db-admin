@@ -13,12 +13,14 @@ type ConfigService struct {
 }
 
 type Config struct {
-	App AppConfig `yaml:"app"`
+	App     AppConfig     `yaml:"app"`
+	Logging LoggingConfig `yaml:"logging"`
 }
 
 type AppConfig struct {
 	Name        string       `yaml:"name"`
 	Description string       `yaml:"description"`
+	Version     string       `yaml:"version"`
 	Window      WindowConfig `yaml:"window"`
 }
 
@@ -30,7 +32,13 @@ type WindowConfig struct {
 	Height    int    `yaml:"height"`
 }
 
-func New() Config {
+type LoggingConfig struct {
+	Development bool   `yaml:"development"`
+	Level       string `yaml:"level"`
+	Output      string `yaml:"output"`
+}
+
+func New() *Config {
 	data, err := os.ReadFile("config.yaml")
 	if err != nil {
 		log.Fatalf("Can not read config file with err: %s", err)
@@ -44,7 +52,7 @@ func New() Config {
 
 	log.Printf("Config file parced: %v+\n", config)
 
-	return config
+	return &config
 }
 
 func NewConfigService(config Config) *ConfigService {

@@ -3,6 +3,7 @@ module artemiy6451/dynamic-db-admin
 go 1.27.4
 
 require (
+	github.com/lmittmann/tint v1.2.1
 	github.com/wailsapp/wails/v3 v3.0.0
 	gopkg.in/yaml.v3 v3.0.1
 )
