@@ -36,3 +36,19 @@ build/
 frontend/node_modules
 node_modules/
 frontend/dist
+
+# Local SQLite database files and journals
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Local editor / OS files
+.DS_Store
+.idea/
+.vscode/
