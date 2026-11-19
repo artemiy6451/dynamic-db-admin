@@ -1,5 +1,4 @@
-APP_NAME=dynamic-ad-admin
-
+APP_NAME=dynamic-db-admin
 
 .PHONY: dev build package test test-race fmt vet check clean
 
@@ -11,6 +10,9 @@ build:
 
 package:
 	wails3 package
+
+bindings:
+	wails3 generate bindings
 
 test:
 	go test ./...
