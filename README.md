@@ -157,15 +157,19 @@ cd ..
 wails3 dev
 ```
 
+### Configuration
+
+The application reads optional settings from the per-user configuration directory. Use `config.example.yaml` as a template and set `DYNAMIC_DB_ADMIN_CONFIG` to its copied path when testing local configuration. Production defaults work without a repository-local config file.
+
 ### Generate Wails bindings
 
-После изменения экспортируемых методов Wails-сервисов:
+After changing exported Wails service methods:
 
 ```bash
 wails3 generate bindings
 ```
 
-Generated файлы в `frontend/bindings/` не редактируются вручную.
+Generated files in `frontend/bindings/` are not edited manually. The Wails build tasks also regenerate TypeScript bindings before building the frontend.
 
 ### Production build
 
