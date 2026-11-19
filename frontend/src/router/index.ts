@@ -16,16 +16,16 @@ const router = createRouter({
                     component: () => import('../pages/DashboardPage.vue'),
                     meta: {
                         title: 'Главная',
-                        description: 'Обзор приложения',
+                        description: 'Обзор открытых баз данных',
                     },
                 },
                 {
-                    path: 'connections',
-                    name: 'Connections',
-                    component: () => import('../pages/ConnectionsPage.vue'),
+                    path: 'databases',
+                    name: 'Databases',
+                    component: () => import('../pages/DatabasesPage.vue'),
                     meta: {
-                        title: 'Подключения',
-                        description: 'Управление подключениями PostgreSQL',
+                        title: 'Базы данных',
+                        description: 'Открытие и управление SQLite-файлами',
                     },
                 },
                 {
@@ -36,6 +36,10 @@ const router = createRouter({
                         title: 'Настройки',
                         description: 'Настройки приложения',
                     },
+                },
+                {
+                    path: ':pathMatch(.*)*',
+                    redirect: '/',
                 },
             ],
         },
