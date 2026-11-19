@@ -1,155 +1,151 @@
 # Dynamic DB Admin
 
-**Dynamic DB Admin** — desktop-приложение для управления PostgreSQL базами данных с графическим интерфейсом. Проект разрабатывается на Go и Vue 3 с использованием Wails.
+**Dynamic DB Admin** — desktop-приложение для визуального проектирования, изменения структуры и управления содержимым баз данных SQLite.
 
-Приложение предназначено для удобного просмотра, анализа и управления структурой баз данных и их содержимым без необходимости постоянно писать SQL-запросы вручную.
+Проект создаётся на Go и Wails v3 с frontend на Vue 3 + TypeScript. Приложение ориентировано на работу с локальными файлами SQLite: пользователь открывает базу данных и управляет её схемой и записями через графический интерфейс.
 
-> **Status:** Early Development
+> **Status:** Early Development. Описанные ниже возможности являются целями проекта, если явно не отмечены как реализованные.
 
-## Overview
+## Product scope
 
-Dynamic DB Admin позволит подключаться к нескольким PostgreSQL серверам, просматривать структуру баз данных, управлять таблицами и работать с записями через динамический графический интерфейс.
+Dynamic DB Admin работает с файлами SQLite (`.db`, `.sqlite`, `.sqlite3`). Это не клиент для PostgreSQL/MySQL и не менеджер удалённых серверных подключений.
 
-Основная идея проекта — предоставить универсальный инструмент администрирования PostgreSQL, в котором интерфейс автоматически адаптируется к структуре выбранной таблицы.
+Основные сценарии:
 
-## Features
+- Открытие, создание и закрытие нескольких SQLite-файлов.
+- Исследование структуры базы: таблицы, представления, индексы, триггеры, столбцы и ограничения.
+- Изменение схемы базы данных через визуальный редактор.
+- Просмотр и редактирование записей в табличном редакторе и автоматически генерируемых формах.
+- Просмотр связей между таблицами в ER-диаграмме.
+- Безопасное применение структурных изменений с резервным копированием и проверкой целостности.
 
-Планируемые возможности:
+### Planned features
 
-### Connection Management
-- Управление несколькими PostgreSQL подключениями.
-- Проверка доступности сервера.
-- Настройка параметров подключения.
-- Поддержка SSL/TLS.
-- Управление состоянием подключений.
+**Database management**
+- Создание новой SQLite-базы и открытие существующего файла.
+- Несколько открытых баз и список недавно открытых файлов.
+- Информация о файле, версии SQLite и состоянии базы.
 
-### Database Explorer
-- Просмотр доступных баз данных.
-- Навигация по схемам.
-- Просмотр таблиц и представлений.
-- Просмотр структуры объектов базы данных.
+**Database explorer**
+- Дерево таблиц, views, indexes и triggers.
+- Информация о столбцах, типах, первичных и внешних ключах, ограничениях.
+- Повторное чтение структуры после изменений.
 
-### Schema Management
-- Создание, удаление и переименование таблиц.
-- Добавление, удаление и переименование столбцов.
-- Изменение типов данных.
-- Управление DEFAULT и NOT NULL.
-- Управление первичными и внешними ключами.
-- Просмотр и управление индексами и ограничениями.
+**Schema designer**
+- Создание, переименование и удаление таблиц и столбцов.
+- Настройка типов, PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, DEFAULT и CHECK.
+- Создание индексов.
+- Безопасные миграции для операций, которые SQLite не поддерживает напрямую.
 
-### Record Management
-- Просмотр записей в таблицах.
+**Relationship designer**
+- ER-диаграмма на основе реальных внешних ключей.
+- Визуальное расположение таблиц и отображение связей.
+- Сохранение координат и настроек диаграммы во внутреннем хранилище приложения.
+
+**Data editor**
+- Табличный просмотр записей и динамические формы.
 - Добавление, редактирование и удаление записей.
-- Динамическое построение таблиц и форм на основе схемы PostgreSQL.
-- Сортировка и фильтрация данных.
-- Постраничная загрузка записей.
+- Сортировка, фильтрация, поиск и пагинация.
+- Выбор связанных записей с учётом внешних ключей.
 
-### Security & Audit
-- Безопасное хранение параметров подключений.
-- Контроль выполнения операций.
-- Подтверждение потенциально опасных изменений.
-- Журналирование операций с базами данных.
+**Safety**
+- Подтверждение разрушительных действий.
+- Резервная копия перед рискованными изменениями схемы.
+- Транзакции там, где они применимы.
+- Проверка внешних ключей и целостности базы.
+- Аккуратная работа с таблицами без первичного ключа и составными ключами.
 
-## Tech Stack
+SQL-редактор, расширенные инструменты импорта/экспорта и дополнительные средства работы с views/triggers могут быть добавлены после первой версии.
+
+## Technology stack
 
 ### Backend
-- [Go](https://go.dev/) — основной язык backend.
-- [Wails](https://wails.io/) — создание desktop-приложения и взаимодействие Go с frontend.
-- [pgx](https://github.com/jackc/pgx) — работа с PostgreSQL.
-- [SQLite](https://sqlite.org/) — локальное хранилище настроек и метаданных.
+- [Go](https://go.dev/) — backend и предметная логика.
+- [Wails v3](https://v3alpha.wails.io/) — desktop runtime и Go bindings.
+- `database/sql` — стандартный интерфейс доступа к данным.
+- SQLite driver — будет выбран и зафиксирован после проверки совместимости с целевыми ОС и необходимыми SQLite API.
+- `log/slog` — структурированное логирование.
 
 ### Frontend
-- [Vue 3](https://vuejs.org/) — пользовательский интерфейс.
-- [TypeScript](https://www.typescriptlang.org/) — типизация.
-- [Vite](https://vite.dev/) — сборка frontend.
-- [Pinia](https://pinia.vuejs.org/) — управление состоянием.
-- [Vue Router](https://router.vuejs.org/) — маршрутизация.
-- [Tailwind CSS](https://tailwindcss.com/) — стилизация.
-- [TanStack Table](https://tanstack.com/table/latest) — работа с таблицами.
+- [Vue 3](https://vuejs.org/) — Composition API и `<script setup>`.
+- [TypeScript](https://www.typescriptlang.org/).
+- [Vite](https://vite.dev/).
+- [Pinia](https://pinia.vuejs.org/).
+- [Vue Router](https://router.vuejs.org/).
+- [Tailwind CSS v4](https://tailwindcss.com/).
+- [Lucide](https://lucide.dev/) — иконки.
 
 ## Architecture
 
-Проект использует архитектуру модульного монолита с принципами Clean Architecture и Hexagonal Architecture.
+Приложение строится как модульный монолит с разделением на domain, application, infrastructure и adapters.
 
-Основные уровни приложения:
+- **Domain** содержит предметные модели и правила, не зависит от Wails и SQLite-драйвера.
+- **Application** реализует сценарии использования и координирует операции.
+- **Infrastructure** реализует работу с SQLite-файлами, миграции, внутреннее хранилище, конфигурацию и логирование.
+- **Wails adapters** предоставляют типизированный API frontend.
+- **Frontend** организован по функциональным областям (features).
 
-| Layer | Responsibility |
-|---|---|
-| Domain | Бизнес-сущности и правила |
-| Application | Сценарии использования приложения |
-| Infrastructure | PostgreSQL, SQLite, файловая система |
-| Adapters | Взаимодействие с Wails и frontend |
-| Platform | Конфигурация, системные сервисы и общие механизмы |
+В приложении существуют два разных вида SQLite-хранилищ:
 
-Бизнес-логика не должна зависеть от Wails или Vue. Это позволит в дальнейшем расширить приложение, например, добавить REST API или серверный режим работы.
+1. **Пользовательские базы** — выбранные пользователем файлы, содержимое и схема которых редактируются.
+2. **Внутреннее хранилище приложения** — настройки, список недавних файлов, состояние интерфейса, расположение объектов ER-диаграмм и другие метаданные.
 
-## Project Structure
+Эти хранилища не должны смешиваться. Закрытие приложения не должно приводить к изменению или перемещению пользовательских файлов.
+
+Frontend передаёт backend типизированные описания операций, а не произвольные SQL-фрагменты. Backend проверяет входные данные, безопасно формирует SQL и использует параметры для значений.
+
+Подробности и правила зависимостей описаны в [docs/architecture.md](docs/architecture.md).
+
+## Project structure
+
+Структура будет расширяться по мере появления реальных модулей. Целевое направление:
 
 ```text
 dynamic-db-admin/
 ├── main.go
-├── app.go
 ├── internal/
-│   ├── app/
-│   ├── domain/
-│   ├── application/
-│   ├── infrastructure/
-│   │   ├── postgres/
-│   │   ├── sqlite/
-│   │   ├── security/
-│   │   └── logging/
+│   ├── app/                  # composition root и запуск Wails
+│   ├── domain/               # предметные модели и правила
+│   ├── application/          # use cases
 │   ├── adapters/
-│   │   ├── wails/
-│   │   └── events/
-│   └── platform/
+│   │   └── wails/            # frontend-facing services
+│   └── infrastructure/
+│       ├── sqlite/            # пользовательские SQLite-файлы
+│       ├── storage/            # внутреннее хранилище приложения
+│       ├── config/
+│       └── logging/
 ├── frontend/
+│   ├── bindings/              # generated Wails bindings
 │   └── src/
 │       ├── app/
+│       ├── components/
 │       ├── layouts/
 │       ├── pages/
 │       ├── features/
-│       ├── components/
-│       ├── stores/
-│       ├── composables/
 │       ├── services/
-│       ├── types/
+│       ├── stores/
 │       └── styles/
 ├── build/
 ├── docs/
-│   └── sprints/
-├── tests/
-├── go.mod
-├── go.sum
-├── wails.json
-└── README.md
+└── go.mod
 ```
 
-Структура будет постепенно расширяться по мере реализации функциональности.
+Не нужно создавать пустые пакеты заранее. Конкретные директории добавляются вместе с реализуемой функциональностью.
 
 ## Development
 
 ### Requirements
 
-Для разработки потребуются:
-
-- Go — актуальная поддерживаемая версия.
+- Go version compatible with the version declared in `go.mod`.
 - Node.js и npm.
-- Wails CLI.
-- Системные зависимости Wails для целевой ОС.
-- PostgreSQL — для интеграционного тестирования будущих модулей.
-
-### Clone repository
-
-```bash
-git clone https://github.com/USERNAME/dynamic-db-admin.git
-cd dynamic-db-admin
-```
+- Wails v3 CLI.
+- Системные зависимости Wails для целевой ОС (на Linux — GTK4 и WebKitGTK 6.0).
+- Для проверки Windows-сборки — Windows environment или поддерживаемый Windows CI runner.
 
 ### Install dependencies
 
 ```bash
 go mod download
-
 cd frontend
 npm install
 cd ..
@@ -158,94 +154,69 @@ cd ..
 ### Development mode
 
 ```bash
-wails dev
+wails3 dev
 ```
+
+### Generate Wails bindings
+
+После изменения экспортируемых методов Wails-сервисов:
+
+```bash
+wails3 generate bindings
+```
+
+Generated файлы в `frontend/bindings/` не редактируются вручную.
 
 ### Build
 
 ```bash
-wails build
+wails3 build
 ```
 
-Для Windows:
-```bash
-wails build GOOS=windows
-```
+Точные параметры сборки зависят от целевой платформы и конфигурации Wails v3 в репозитории.
 
-Готовая сборка будет находиться в каталоге `build/bin/`.
+## Git workflow
 
-> Команды и инструкции будут уточняться по мере настройки проекта и закрепления версий инструментов.
+Используется простая двухветочная модель:
 
-## Development Workflow
-
-Разработка ведётся с использованием упрощённой двухветочной модели:
-
-| Branch | Purpose |
+| Branch | Назначение |
 |---|---|
-| `main` | Стабильные версии приложения |
-| `dev` | Основная разработка и интеграция изменений |
+| `dev` | Основная разработка, спринты и интеграция изменений |
+| `main` | Проверенные стабильные версии |
 
-Работа организована по спринтам.
+Обычная работа ведётся в `dev`. Перенос в `main` выполняется только после проверки стабильной версии. Не выполнять force-push и не переписывать историю без отдельного решения.
 
-- Каждый спринт имеет отдельное описание в `docs/sprints/`.
-- Конкретные задачи отслеживаются через GitHub Issues.
-- Завершённые и проверенные изменения интегрируются в `main`.
-- Стабильные версии отмечаются Git-тегами.
+### Commit convention
 
-### Commit Convention
-
-Для сообщений коммитов используется Conventional Commits:
+Используются Conventional Commits:
 
 ```text
-feat: add PostgreSQL connection manager
-fix: handle connection timeout
-refactor: simplify schema introspection
-docs: update installation instructions
-test: add database integration tests
-build: configure Windows packaging
+feat(databases): add SQLite file opening
+fix(sqlite): preserve foreign keys during migration
+refactor(frontend): extract database explorer feature
+test(migration): cover composite primary keys
+docs: update architecture overview
+build: configure Linux packaging
 chore: update dependencies
 ```
 
+Один коммит должен описывать одно логически завершённое изменение.
+
 ## Roadmap
 
-Проект развивается поэтапно:
+1. Project Foundation
+2. SQLite Database Management
+3. Database Explorer
+4. Schema Designer and Migration Engine
+5. Relationship Designer
+6. Data Editor
+7. Advanced Data Management
+8. Safety and Data Integrity
+9. Testing and Stabilization
+10. Release and Distribution
 
-- [ ] Sprint 01 — Project Foundation
-- [ ] Sprint 02 — Local Storage & Configuration
-- [ ] Sprint 03 — PostgreSQL Connection Manager
-- [ ] Sprint 04 — Database Schema Introspection
-- [ ] Sprint 05 — Schema Management
-- [ ] Sprint 06 — Record Management
-- [ ] Sprint 07 — Frontend & User Experience
-- [ ] Sprint 08 — Security & Audit
-- [ ] Sprint 09 — Testing & Stabilization
-- [ ] Sprint 10 — Release & Distribution
-
-Подробный план разработки находится в каталоге `docs/sprints/`.
-
-## Security
-
-Безопасность является одним из основных требований проекта.
-
-Основные принципы:
-
-- Использование параметризованных SQL-запросов.
-- Безопасная обработка SQL identifiers.
-- Проверка операций на стороне backend.
-- Минимально необходимые права PostgreSQL.
-- Защита сохранённых учётных данных.
-- Маскирование конфиденциальных данных в логах.
-- Подтверждение потенциально опасных операций.
-
-Не используйте учётные записи PostgreSQL с избыточными привилегиями для повседневной работы.
+Подробный план находится в [docs/roadmap.md](docs/roadmap.md).
 
 ## License
 
-This project is licensed under the Apache License 2.0.
-
-See the [LICENSE](LICENSE) file for details.
-
-## Author
-
-Developed by **Lokach**.
-
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
