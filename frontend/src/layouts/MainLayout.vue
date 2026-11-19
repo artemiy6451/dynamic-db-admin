@@ -6,13 +6,8 @@ import Sidebar from '../components/layout/Sidebar.vue'
 
 const route = useRoute()
 
-const pageTitle = computed(() => {
-    return route.meta.title ?? 'Dynamic DB Admin'
-})
-
-const pageDescription = computed(() => {
-    return route.meta.description ?? ''
-})
+const pageTitle = computed(() => route.meta.title ?? 'Dynamic DB Admin')
+const pageDescription = computed(() => route.meta.description ?? '')
 </script>
 
 <template>
@@ -20,7 +15,6 @@ const pageDescription = computed(() => {
         <Sidebar />
 
         <div class="flex min-w-0 flex-1 flex-col">
-            <!-- Header -->
             <header class="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-8">
                 <div>
                     <h2 class="text-lg font-semibold text-white">
@@ -34,11 +28,10 @@ const pageDescription = computed(() => {
 
                 <div class="flex items-center gap-2 text-xs text-gray-400">
                     <span class="h-2 w-2 rounded-full bg-gray-500" />
-                    Нет активных подключений
+                    База данных не открыта
                 </div>
             </header>
 
-            <!-- Main content -->
             <main class="min-h-0 flex-1 overflow-y-auto p-8">
                 <div class="mx-auto w-full max-w-7xl">
                     <RouterView />
