@@ -1,0 +1,26 @@
+version: '3'
+
+includes:
+  common: ../Taskfile.yml
+
+tasks:
+  build:
+    desc: Build Dynamic DB Admin for Linux
+    cmds:
+      - task: build:native
+        vars:
+          DEV: '{{.DEV}}'
+
+  build:native:
+    internal: true
+    deps:
+      - task: common:build:frontend
+        vars:
+          DEV:
+            ref: .DEV
+    cmds:
+      - mkdir -p bin
+      - '{{if eq .DEV "true"}}go build -buildvcs=false -gcflags=all="-N -l" -o "bin/{{.APP_NAME}}"{{else}}go build -tags production -trimpath -buildvcs=false -ldflags="-w -s" -o "bin/{{.APP_NAME}}"{{end}}'
+    env:
+      GOOS: linux
+      CGO_ENABLED: 1
