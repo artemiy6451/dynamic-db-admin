@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=dynamic-db-admin
+Exec=dynamic-db-admin
+Icon=dynamic-db-admin
+Categories=Development;
+Terminal=false
+Keywords=wails
+Version=1.0
+StartupNotify=false
