@@ -35,7 +35,6 @@ bin/
 frontend/node_modules
 node_modules/
 frontend/dist
-build/
 
 # Local SQLite database files and journals
 *.db
