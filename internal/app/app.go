@@ -1,7 +1,8 @@
-// Package app for create and setup wails application
+// Package app creates and configures the Wails application.
 package app
 
 import (
+	"embed"
 	"log/slog"
 
 	"artemiy6451/dynamic-db-admin/internal/infrastructure/config"
@@ -11,22 +12,21 @@ import (
 
 type App struct {
 	wails *application.App
-	dpes  *Dependencies
+	deps  *Dependencies
 }
 
-func New(logger *slog.Logger, cfg *config.Config) (*App, error) {
-	wailsApp, deps, err := Bootstrap(cfg, logger)
+func New(logger *slog.Logger, cfg *config.Config, assets embed.FS) (*App, error) {
+	wailsApp, deps, err := Bootstrap(cfg, logger, assets)
 	if err != nil {
 		return nil, err
 	}
 	return &App{
 		wails: wailsApp,
-		dpes:  deps,
+		deps:  deps,
 	}, nil
 }
 
 func (a *App) Run() error {
-	a.dpes.Logger.Info("starting application")
-
+	a.deps.Logger.Info("starting application")
 	return a.wails.Run()
 }
