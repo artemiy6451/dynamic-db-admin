@@ -18,7 +18,6 @@ type Dependencies struct {
 // InitializeDependencies constructs the application's dependencies.
 func InitializeDependencies(cfg *config.Config, logger *slog.Logger) (*Dependencies, error) {
 	appService := wailsadapter.NewAppService(logger, cfg)
-
 	return &Dependencies{
 		Logger:     logger,
 		AppService: appService,
@@ -26,8 +25,7 @@ func InitializeDependencies(cfg *config.Config, logger *slog.Logger) (*Dependenc
 }
 
 // Bootstrap creates and configures the Wails application.
-func Bootstrap(cfg *config.Config, logger *slog.Logger) (*application.App, *Dependencies, error) {
-	var assets embed.FS
+func Bootstrap(cfg *config.Config, logger *slog.Logger, assets embed.FS) (*application.App, *Dependencies, error) {
 	deps, err := InitializeDependencies(cfg, logger)
 	if err != nil {
 		return nil, nil, err
@@ -45,8 +43,6 @@ func Bootstrap(cfg *config.Config, logger *slog.Logger) (*application.App, *Depe
 	})
 
 	createMainWindow(wailsApp, cfg)
-
 	deps.Logger.Info("application initialized")
-
 	return wailsApp, deps, nil
 }
