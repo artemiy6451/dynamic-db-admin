@@ -1,0 +1,46 @@
+version: '3'
+
+tasks:
+  go:mod:tidy:
+    desc: Keep Go module dependencies tidy before generating bindings
+    run: once
+    cmds:
+      - go mod tidy
+
+  install:frontend:deps:
+    desc: Install frontend dependencies
+    dir: frontend
+    run: once
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - node_modules
+    cmds:
+      - npm ci
+
+  generate:bindings:
+    desc: Generate TypeScript bindings from Wails services
+    run: once
+    deps:
+      - task: go:mod:tidy
+    cmds:
+      - wails3 generate bindings -clean=true -ts
+
+  build:frontend:
+    desc: Build frontend assets for embedding into the Go binary
+    dir: frontend
+    run: once
+    deps:
+      - task: install:frontend:deps
+      - task: generate:bindings
+    cmds:
+      - npm run {{if eq .DEV "true"}}build:dev{{else}}build{{end}}
+
+  dev:frontend:
+    desc: Start the Vite development server
+    dir: frontend
+    deps:
+      - task: install:frontend:deps
+    cmds:
+      - npm run dev -- --port {{.VITE_PORT}} --strictPort
