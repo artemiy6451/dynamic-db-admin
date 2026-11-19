@@ -52,15 +52,11 @@ const navigation = [
                 Workspace
             </p>
 
-            <RouterLink v-for="item in navigation" :key="item.name" :to="item.path" v-slot="{ isActive }">
-                <div class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors" :class="isActive
-                        ? 'bg-emerald-500/10 text-emerald-400'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                    ">
-                    <component :is="item.icon" :size="18" />
-                    <span class="flex-1">{{ item.label }}</span>
-                    <ChevronRight v-if="isActive" :size="15" />
-                </div>
+            <RouterLink v-for="item in navigation" :key="item.name" :to="item.path"
+                active-class="bg-emerald-500/10 text-emerald-400"
+                class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-white">
+                <component :is="item.icon" :size="18" />
+                <span>{{ item.label }}</span>
             </RouterLink>
         </nav>
 

@@ -8,6 +8,8 @@ import {
     ArrowUpRight,
 } from 'lucide-vue-next'
 
+import BaseButton from '../components/ui/BaseButton.vue'
+
 const router = useRouter()
 
 const statistics = [
@@ -30,6 +32,10 @@ const statistics = [
         icon: Activity,
     },
 ]
+
+function openConnections() {
+    router.push({ name: 'Connections' })
+}
 </script>
 
 <template>
@@ -41,7 +47,8 @@ const statistics = [
             </h1>
 
             <p class="mt-2 text-sm text-gray-400">
-                Управляйте подключениями PostgreSQL и базами данных из одного приложения.
+                Управляйте подключениями PostgreSQL и базами данных
+                из одного приложения.
             </p>
         </section>
 
@@ -82,23 +89,19 @@ const statistics = [
                     </p>
                 </div>
 
-                <button
-                    class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-400"
-                    @click="router.push('/connections')">
+                <BaseButton @click="openConnections">
                     <Plus :size="17" />
                     Добавить подключение
                     <ArrowUpRight :size="15" />
-                </button>
+                </BaseButton>
             </div>
         </section>
 
         <!-- Recent activity -->
         <section>
-            <div class="mb-4 flex items-center justify-between">
-                <h2 class="text-base font-semibold text-white">
-                    Последняя активность
-                </h2>
-            </div>
+            <h2 class="mb-4 text-base font-semibold text-white">
+                Последняя активность
+            </h2>
 
             <div class="rounded-xl border border-white/10 bg-[#0b0d17] p-8 text-center">
                 <Activity :size="28" class="mx-auto text-gray-600" />

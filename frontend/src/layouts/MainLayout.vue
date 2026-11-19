@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+
 import Sidebar from '../components/layout/Sidebar.vue'
 
 const route = useRoute()
@@ -31,11 +32,9 @@ const pageDescription = computed(() => {
                     </p>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <span class="flex items-center gap-2 text-xs text-gray-400">
-                        <span class="h-2 w-2 rounded-full bg-gray-500" />
-                        No active connections
-                    </span>
+                <div class="flex items-center gap-2 text-xs text-gray-400">
+                    <span class="h-2 w-2 rounded-full bg-gray-500" />
+                    Нет активных подключений
                 </div>
             </header>
 
