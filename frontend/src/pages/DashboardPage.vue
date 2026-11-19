@@ -3,9 +3,10 @@ import { useRouter } from 'vue-router'
 import {
     Database,
     Table2,
-    Activity,
+    Clock3,
     Plus,
     ArrowUpRight,
+    Activity,
 } from 'lucide-vue-next'
 
 import BaseButton from '../components/ui/BaseButton.vue'
@@ -14,48 +15,49 @@ const router = useRouter()
 
 const statistics = [
     {
-        label: 'Подключения',
+        label: 'Открытые базы',
         value: '0',
-        description: 'Сохранённых подключений',
+        description: 'SQLite-файлов открыто сейчас',
         icon: Database,
     },
     {
-        label: 'Базы данных',
+        label: 'Таблицы',
         value: '0',
-        description: 'Доступных баз данных',
+        description: 'В открытых базах данных',
         icon: Table2,
     },
     {
-        label: 'Активные сессии',
+        label: 'Недавние базы',
         value: '0',
-        description: 'Текущих подключений',
-        icon: Activity,
+        description: 'Файлов в истории приложения',
+        icon: Clock3,
     },
 ]
 
-function openConnections() {
-    router.push({ name: 'Connections' })
+function openDatabases() {
+    router.push({ name: 'Databases' })
 }
 </script>
 
 <template>
     <div class="space-y-8">
-        <!-- Welcome -->
         <section>
             <h1 class="text-2xl font-semibold text-white">
                 Добро пожаловать!
             </h1>
 
             <p class="mt-2 text-sm text-gray-400">
-                Управляйте подключениями PostgreSQL и базами данных
-                из одного приложения.
+                Создавайте и открывайте SQLite-базы, изучайте их структуру
+                и управляйте данными в одном приложении.
             </p>
         </section>
 
-        <!-- Statistics -->
         <section class="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div v-for="item in statistics" :key="item.label"
-                class="rounded-xl border border-white/10 bg-[#0b0d17] p-5">
+            <div
+                v-for="item in statistics"
+                :key="item.label"
+                class="rounded-xl border border-white/10 bg-[#0b0d17] p-5"
+            >
                 <div class="flex items-center justify-between">
                     <span class="text-sm text-gray-400">
                         {{ item.label }}
@@ -74,7 +76,6 @@ function openConnections() {
             </div>
         </section>
 
-        <!-- Getting started -->
         <section class="rounded-xl border border-white/10 bg-[#0b0d17] p-6">
             <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -83,21 +84,20 @@ function openConnections() {
                     </h2>
 
                     <p class="mt-2 max-w-xl text-sm text-gray-400">
-                        Для начала работы добавьте подключение к PostgreSQL.
-                        После этого вы сможете просматривать базы данных,
-                        управлять таблицами и записями.
+                        Откройте существующий файл SQLite или создайте новую базу.
+                        После этого здесь появятся доступные инструменты работы
+                        со структурой и данными.
                     </p>
                 </div>
 
-                <BaseButton @click="openConnections">
+                <BaseButton @click="openDatabases">
                     <Plus :size="17" />
-                    Добавить подключение
+                    Открыть базу данных
                     <ArrowUpRight :size="15" />
                 </BaseButton>
             </div>
         </section>
 
-        <!-- Recent activity -->
         <section>
             <h2 class="mb-4 text-base font-semibold text-white">
                 Последняя активность
