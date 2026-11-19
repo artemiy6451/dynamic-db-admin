@@ -19,7 +19,7 @@ tasks:
           DEV:
             ref: .DEV
     cmds:
-      - mkdir -p bin
+      - powershell -NoProfile -Command "New-Item -ItemType Directory -Force -Path bin | Out-Null"
       - '{{if eq .DEV "true"}}go build -buildvcs=false -gcflags=all="-N -l" -o "bin/{{.APP_NAME}}.exe"{{else}}go build -tags production -trimpath -buildvcs=false -ldflags="-w -s -H windowsgui" -o "bin/{{.APP_NAME}}.exe"{{end}}'
     env:
       GOOS: windows
