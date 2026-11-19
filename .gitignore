@@ -41,9 +41,9 @@ frontend/dist
 *.db
 *.sqlite
 *.sqlite3
-*.sqlite-journal
-*.sqlite-wal
-*.sqlite-shm
+*-journal
+*-wal
+*-shm
 
 # TypeScript build cache
 *.tsbuildinfo
