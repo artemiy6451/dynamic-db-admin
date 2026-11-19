@@ -7,10 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"artemiy6451/dynamic-db-admin/internal/infrastructure/storage"
 	"gopkg.in/yaml.v3"
 )
-
-const appDirectoryName = "Dynamic DB Admin"
 
 type ConfigService struct {
 	config Config
@@ -69,11 +68,11 @@ func New() (*Config, error) {
 
 	configPath := os.Getenv("DYNAMIC_DB_ADMIN_CONFIG")
 	if configPath == "" {
-		configRoot, err := os.UserConfigDir()
+		paths, err := storage.ResolvePaths()
 		if err != nil {
-			return nil, fmt.Errorf("resolve user config directory: %w", err)
+			return nil, fmt.Errorf("resolve application storage paths: %w", err)
 		}
-		configPath = filepath.Join(configRoot, appDirectoryName, "config.yaml")
+		configPath = filepath.Join(paths.ConfigDir, "config.yaml")
 	}
 
 	data, err := os.ReadFile(configPath)
