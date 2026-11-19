@@ -167,13 +167,15 @@ wails3 generate bindings
 
 Generated файлы в `frontend/bindings/` не редактируются вручную.
 
-### Build
+### Production build
 
 ```bash
 wails3 build
 ```
 
-Точные параметры сборки зависят от целевой платформы и конфигурации Wails v3 в репозитории.
+Production build first generates Wails bindings, builds the Vite frontend into `frontend/dist`, then embeds those files into the Go executable. The application does not need a separate Vite server after build.
+
+Platform requirements and data-location rules are documented in [docs/build-and-runtime.md](docs/build-and-runtime.md).
 
 ## Git workflow
 
