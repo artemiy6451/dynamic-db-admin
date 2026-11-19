@@ -1,8 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import DashboardPage from '../pages/DashboardPage.vue'
-import ConnectionsPage from '../pages/ConnectionsPage.vue'
-import SettingsPage from '../pages/SettingsPage.vue'
+import MainLayout from '../layouts/MainLayout.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -10,18 +8,36 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'dashboard',
-            component: DashboardPage,
-        },
-        {
-            path: '/connections',
-            name: 'connections',
-            component: ConnectionsPage,
-        },
-        {
-            path: '/settings',
-            name: 'settings',
-            component: SettingsPage,
+            component: MainLayout,
+            children: [
+                {
+                    path: '',
+                    name: 'Dashboard',
+                    component: () => import('../pages/DashboardPage.vue'),
+                    meta: {
+                        title: 'Главная',
+                        description: 'Обзор приложения',
+                    },
+                },
+                {
+                    path: 'connections',
+                    name: 'Connections',
+                    component: () => import('../pages/ConnectionsPage.vue'),
+                    meta: {
+                        title: 'Подключения',
+                        description: 'Управление подключениями PostgreSQL',
+                    },
+                },
+                {
+                    path: 'settings',
+                    name: 'Settings',
+                    component: () => import('../pages/SettingsPage.vue'),
+                    meta: {
+                        title: 'Настройки',
+                        description: 'Настройки приложения',
+                    },
+                },
+            ],
         },
     ],
 })

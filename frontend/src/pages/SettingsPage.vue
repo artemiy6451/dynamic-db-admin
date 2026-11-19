@@ -1,8 +1,11 @@
 <template>
-  <main class="p-8">
-    <h1 class="text-2xl font-semibold">Settings</h1>
-    <p class="mt-2 text-gray-400">
-      Configure application preferences.
-    </p>
-  </main>
+    <section>
+        <h1 class="text-xl font-semibold text-white">
+            Настройки
+        </h1>
+
+        <p class="mt-2 text-sm text-gray-400">
+            Здесь будут настройки приложения.
+        </p>
+    </section>
 </template>
