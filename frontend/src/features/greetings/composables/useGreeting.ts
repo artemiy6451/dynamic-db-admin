@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { Greet } from "../../bindings/artemiy6451/dynamic-db-admin/internal/adapters/wails/appservice";
+import { Greet } from "../../../../bindings/artemiy6451/dynamic-db-admin/internal/adapters/wails/appservice";
 
 
 export function useGreeting() {

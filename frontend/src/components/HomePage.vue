@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useGreeting } from '../composables/useGreeting';
+import { useGreeting } from '../features/greetings/composables/useGreeting';
 
 const name = ref('Lokach')
 

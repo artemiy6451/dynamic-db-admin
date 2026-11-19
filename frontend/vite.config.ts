@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import wails from "@wailsio/runtime/plugins/vite";
+import tailwindcss from "@tailwindcss/vite"
 import { fileURLToPath } from "node:url";
 
 // https://vitejs.dev/config/
@@ -15,5 +16,9 @@ export default defineConfig({
         port: Number(process.env.WAILS_VITE_PORT) || 9245,
         strictPort: true,
     },
-    plugins: [vue(), wails("./bindings")],
+    plugins: [
+        vue(),
+        wails("./bindings"),
+        tailwindcss(),
+    ],
 });
