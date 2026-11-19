@@ -215,7 +215,7 @@ chore: update dependencies
 9. Testing and Stabilization
 10. Release and Distribution
 
-Подробный план находится в [docs/roadmap.md](docs/roadmap.md).
+Подробный план находится в [docs/roadmap.md](docs/roadmap.md). Архитектурные решения описаны в [docs/architecture.md](docs/architecture.md). Рабочие заметки: [Sprint 1](docs/sprints/sprint-01.md) и [Sprint 2](docs/sprints/sprint-02.md).
 
 ## License
 
