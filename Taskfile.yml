@@ -1,71 +1,56 @@
----
 version: '3'
 
 vars:
-  APP_NAME: "dynamic-db-admin"
-  BIN_DIR: "bin"
-  PACKAGE_MANAGER: '{{.PACKAGE_MANAGER | default "npm"}}'
-  VITE_PORT: '{{.WAILS_VITE_PORT | default 9245}}'
-  # Target OS for build/package/run. Defaults to the host OS, and is overridden
-  # by `wails3 build GOOS=...` (or the GOOS env var) for cross-compilation. The
-  # tasks below dispatch to the matching platform Taskfile via this variable.
-  GOOS: '{{.GOOS | default OS}}'
-
-includes:
-  common: ./build/Taskfile.yml
-  windows: ./build/windows/Taskfile.yml
-  darwin: ./build/darwin/Taskfile.yml
-  linux: ./build/linux/Taskfile.yml
-  ios: ./build/ios/Taskfile.yml
-  android: ./build/android/Taskfile.yml
+  VITE_PORT: '{{.WAILS_VITE_PORT | default "9245"}}'
 
 tasks:
-  build:
-    summary: Builds the application
-    cmds:
-      - task: "{{.GOOS}}:build"
-
-  package:
-    summary: Packages a production build of the application
-    cmds:
-      - task: "{{.GOOS}}:package"
-
-  run:
-    summary: Runs the application
-    cmds:
-      - task: "{{.GOOS}}:run"
-
   dev:
-    summary: Runs the application in development mode
+    desc: Run the Wails v3 application in development mode
     cmds:
-      - wails3 dev -config ./build/config.yml -port {{.VITE_PORT}}
+      - wails3 dev
 
-  install:msix:tools:
-    summary: Installs tools required for Windows MSIX packaging
+  build:
+    desc: Build the desktop application for the current platform
     cmds:
-      - task: windows:install:msix:tools
+      - wails3 build
 
-  setup:docker:
-    summary: Builds Docker image for cross-compilation (~800MB download)
+  bindings:
+    desc: Regenerate Wails v3 frontend bindings
     cmds:
-      - task: common:setup:docker
+      - wails3 generate bindings
 
-  build:server:
-    summary: Builds the application in server mode (no GUI, HTTP server only)
+  test:
+    desc: Run Go tests
     cmds:
-      - task: common:build:server
+      - go test ./...
 
-  run:server:
-    summary: Runs the application in server mode
+  vet:
+    desc: Run go vet
     cmds:
-      - task: common:run:server
+      - go vet ./...
 
-  build:docker:
-    summary: Builds a Docker image for server mode deployment
+  frontend:install:
+    desc: Install frontend dependencies
+    dir: frontend
     cmds:
-      - task: common:build:docker
+      - npm install
 
-  run:docker:
-    summary: Builds and runs the Docker image
+  frontend:type-check:
+    desc: Type-check the Vue frontend
+    dir: frontend
     cmds:
-      - task: common:run:docker
+      - npm run type-check
+
+  frontend:build:
+    desc: Build the Vue frontend
+    dir: frontend
+    cmds:
+      - npm run build
+
+  check:
+    desc: Run Go and frontend checks
+    cmds:
+      - task: vet
+      - task: test
+      - task: frontend:type-check
+      - task: frontend:build
