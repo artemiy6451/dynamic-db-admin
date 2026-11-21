@@ -3,14 +3,16 @@
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import { Call as $Call, CancellablePromise as $CancellablePromise } from "@wailsio/runtime";
+import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Create } from "@wailsio/runtime";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
 import * as $models from "./models.js";
 
 export function GetAppInfo(): $CancellablePromise<$models.AppInfo> {
-    return $Call.ByID(2679357342);
+    return $Call.ByID(2679357342).then(($result: any) => {
+        return $$createType0($result);
+    });
 }
 
 export function Greet(name: string): $CancellablePromise<string> {
@@ -20,3 +22,6 @@ export function Greet(name: string): $CancellablePromise<string> {
 export function Ping(): $CancellablePromise<string> {
     return $Call.ByID(895171405);
 }
+
+// Private type creation functions
+const $$createType0 = $models.AppInfo.createFrom;
