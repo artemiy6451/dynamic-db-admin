@@ -1,4 +1,5 @@
 # Dynamic DB Admin
+[![Desktop build](https://github.com/artemiy6451/dynamic-db-admin/actions/workflows/desktop-build.yml/badge.svg)](https://github.com/artemiy6451/dynamic-db-admin/actions/workflows/desktop-build.yml)
 
 **Dynamic DB Admin** — desktop-приложение для визуального проектирования, изменения структуры и управления содержимым баз данных SQLite.
 
