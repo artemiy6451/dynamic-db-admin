@@ -60,11 +60,14 @@ SQL-редактор, расширенные инструменты импорт
 ## Technology stack
 
 ### Backend
+
 - [Go](https://go.dev/) — backend и предметная логика.
 - [Wails v3](https://v3alpha.wails.io/) — desktop runtime и Go bindings.
 - `database/sql` — стандартный интерфейс доступа к данным.
-- SQLite driver — будет выбран и зафиксирован после проверки совместимости с целевыми ОС и необходимыми SQLite API.
+- [`modernc.org/sqlite`](https://pkg.go.dev/modernc.org/sqlite) — Pure Go SQLite driver без CGO.
 - `log/slog` — структурированное логирование.
+
+SQLite driver selection is documented in [ADR 0001](docs/adr/0001-sqlite-driver.md).
 
 ### Frontend
 - [Vue 3](https://vuejs.org/) — Composition API и `<script setup>`.

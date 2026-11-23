@@ -12,7 +12,7 @@ The application opens user-selected database files (`.db`, `.sqlite`, `.sqlite3`
 - Vue 3 Composition API, TypeScript, Vite, Vue Router and Pinia.
 - Tailwind CSS v4 for styling.
 - SQLite for user databases and a separate private application metadata store.
-- Go `database/sql` with a SQLite driver. The driver choice is finalized when Sprint 2 implements the database layer.
+- Go `database/sql` with `modernc.org/sqlite v1.62.0` (Pure Go, no CGO).
 
 ## Architectural style
 
@@ -59,6 +59,25 @@ Never mix application metadata into a user's database unless a future feature ex
 - Analyze dependent objects before rebuilding a table. Never silently discard triggers, indexes, views or foreign-key relationships.
 - Use transactions where supported and create a recoverable backup before risky schema migrations.
 - Verify integrity and foreign-key consistency after structural changes.
+
+## SQLite driver
+
+The application uses `modernc.org/sqlite v1.62.0`.
+
+The driver is selected because it:
+- Does not require CGO or a platform-specific C compiler.
+- Supports Linux and Windows.
+- Implements the standard `database/sql` interfaces.
+- Supports SQLite transactions, PRAGMA statements and the Online Backup API.
+
+Connection-specific PRAGMA settings are configured through the driver DSN:
+
+- `foreign_keys(1)`
+- `busy_timeout(5000)`
+
+The connection pool has a bounded number of open and idle connections.
+
+The driver selection and trade-offs are documented in [ADR 0001](adr/0001-sqlite-driver.md).
 
 ## Data editor
 
